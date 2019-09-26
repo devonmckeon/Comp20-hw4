@@ -1,0 +1,152 @@
+<html>
+  <head>
+    <style type="text/css">
+      div {
+        padding-top: 1%;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function displayNumbers(numbers) {
+        for (var i = 0; i < 6; i++) document.write(numbers[i] + " ");
+        document.write("<br>");
+      }
+      function generateRandom(max) {
+        return 1 + Math.floor(Math.random() * Math.floor(max));
+      }
+      function removeLuckyNumber(realNumbersSorted, realLuckyNumber) {
+        for (var i = 0; i < 6; i++) {
+          if (realNumbersSorted[i] == realLuckyNumber) {
+            realNumbersSorted.splice(i, 1);
+            break;
+          }
+        }
+        return realNumbersSorted;
+      }
+
+      var realNumbers = Array();
+      for (var i = 0; i < 5; i++) realNumbers.push(generateRandom(48));
+
+      var realLuckyNumber = generateRandom(18);
+      realNumbers.push(realLuckyNumber);
+
+      displayNumbers(realNumbers);
+
+      var realNumbersSorted = realNumbers.sort((a, b) => a - b);
+      displayNumbers(realNumbersSorted);
+
+      realNumbersSorted = removeLuckyNumber(realNumbersSorted, realLuckyNumber);
+    </script>
+
+    <form method="get" id="form">
+      <div class="col1"><b>Enter your 5 numbers:</b></div>
+      <div class="col2">
+        <input
+          type="text"
+          name="numbers"
+          id="numbers"
+          placeholder="X X X X X"
+        />
+      </div>
+      <div class="col1"><b>Enter your lucky number:</b></div>
+      <div class="col2">
+        <input
+          type="text"
+          name="lucky-number"
+          id="lucky-number"
+          placeholder="X"
+        />
+      </div>
+      <div>
+        <input type="submit" id="go" class="btn btn-info" value="Go" />
+      </div>
+    </form>
+
+    <script>
+      function displayPayout(matches, lucky) {
+        var payout;
+        if (matches == 0) {
+          payout = "$0";
+          if (lucky) {
+            payout = "$4";
+          }
+        }
+        if (matches == 1) {
+          if (lucky) {
+            payout = "$6";
+          }
+        }
+        if (matches == 2) {
+          payout = "$3";
+          if (lucky) {
+            payout = "$25";
+          }
+        }
+        if (matches == 3) {
+          payout = "$20";
+          if (lucky) {
+            payout = "$150";
+          }
+        }
+        if (matches == 4) {
+          payout = "$200";
+          if (lucky) {
+            payout = "$5000";
+          }
+        }
+        if (matches == 5) {
+          payout = "$25000 a YEAR FOR LIFE";
+          if (lucky) {
+            payout = "$7000 a WEEK FOR LIFE";
+          }
+        }
+        document.write("<br>");
+        document.write("You win " + payout + "!");
+      }
+
+      function countMatches(guessedNumbers, realNumbersSorted) {
+        var matches = 0;
+        for (let i = 0; i < 5; i++) {
+          for (let j = 0; j < 5; j++) {
+            if (parseInt(guessedNumbers[i]) == parseInt(realNumbersSorted[j])) {
+              matches++;
+              break;
+            }
+          }
+        }
+        return matches;
+      }
+
+      function displayResults(
+        guessedNumbers,
+        realNumbersSorted,
+        guessedLuckyNumber
+      ) {
+        var matches = countMatches(guessedNumbers, realNumbersSorted);
+        var lucky = false;
+        if (realLuckyNumber == guessedLuckyNumber) lucky = true;
+
+        document.write("<br>");
+        document.write("You guessed " + matches + " correctly!");
+
+        if (lucky) {
+          document.write("<br>");
+          document.write("Plus you guessed the lucky number!");
+        }
+        displayPayout(matches, lucky);
+      }
+
+      function getInput() {
+        var inputNumbers = document.getElementById("numbers").value;
+        var guessedLuckyNumber = document.getElementById("lucky-number").value;
+        var guessedNumbers = inputNumbers.split(" ");
+        displayResults(guessedNumbers, realNumbersSorted, guessedLuckyNumber);
+        event.preventDefault();
+      }
+
+      const form = document.getElementById("form");
+      form.addEventListener("submit", getInput);
+    </script>
+  </body>
+</html>
