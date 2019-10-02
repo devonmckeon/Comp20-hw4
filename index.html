@@ -1,16 +1,72 @@
 <html>
   <head>
     <style type="text/css">
+      html {
+        width: 100%;
+        height: 100%;
+        text-align: center !important;
+      }
+      body {
+        background-image: url("lottery.jpg");
+      }
+      form {
+        padding: 2%;
+        text-align: center !important;
+        background-color: rgba(252, 248, 248, 0.5) !important;
+      }
       div {
         padding-top: 1%;
+        padding-bottom: 1%;
+        text-align: center;
+      }
+      input {
+        padding-left: 1%;
+      }
+      span.bg-info {
+        opacity: 0.6;
+        text-align: center !important;
+        color: rgba(252, 248, 248);
+        padding-left: 0.5%;
+        padding-right: 0.5%;
+        padding-top: 0.25%;
+        padding-bottom: 0.25%;
+        border-radius: 4px;
+      }
+      span.space {
+        padding: 0.15%;
+      }
+      #matches,
+      #payout,
+      #lucky {
+        opacity: 0.8;
+        display: none;
+        width: 100%;
+        text-align: center;
+        color: rgba(255, 255, 255) !important;
+        padding: 1%;
+        border-radius: 4px;
       }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <script>
       function displayNumbers(numbers) {
-        for (var i = 0; i < 6; i++) document.write(numbers[i] + " ");
-        document.write("<br>");
+        document.write('<div id="printed-numbers">');
+        for (var i = 0; i < 6; i++)
+          document.write(
+            '<span class="bg-info" id="number" disabled=disabled>' +
+              numbers[i] +
+              " " +
+              "</span>" +
+              '<span class="space"></span>'
+          );
+        document.write("</div>");
       }
       function generateRandom(max) {
         return 1 + Math.floor(Math.random() * Math.floor(max));
@@ -62,6 +118,11 @@
         <input type="submit" id="go" class="btn btn-info" value="Go" />
       </div>
     </form>
+    <div id="output">
+      <div class="bg-info" id="matches"></div>
+      <div class="bg-info" id="lucky"></div>
+      <div class="bg-info" id="payout"></div>
+    </div>
 
     <script>
       function displayPayout(matches, lucky) {
@@ -101,8 +162,9 @@
             payout = "$7000 a WEEK FOR LIFE";
           }
         }
-        document.write("<br>");
-        document.write("You win " + payout + "!");
+        payoutOutput = document.getElementById("payout");
+        payoutOutput.style.display = "unset";
+        payoutOutput.innerHTML = "<b>You win " + payout + "!</b>";
       }
 
       function countMatches(guessedNumbers, realNumbersSorted) {
@@ -127,12 +189,15 @@
         var lucky = false;
         if (realLuckyNumber == guessedLuckyNumber) lucky = true;
 
-        document.write("<br>");
-        document.write("You guessed " + matches + " correctly!");
+        matchesOutput = document.getElementById("matches");
+        matchesOutput.style.display = "unset";
+        matchesOutput.innerHTML =
+          "<b>You guessed " + matches + " correctly!</b>";
 
         if (lucky) {
-          document.write("<br>");
-          document.write("Plus you guessed the lucky number!");
+          luckyOutput = document.getElementById("lucky");
+          luckyOutput.style.display = "unset";
+          luckyOutput.innerHTML = "<b>Plus you guessed the lucky number!</b>";
         }
         displayPayout(matches, lucky);
       }
